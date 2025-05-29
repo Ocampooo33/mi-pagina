@@ -1,5 +1,5 @@
 function soloLetras(valor) {
-      return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(valor);
+      return /^[a-zA\s]+$/.test(valor);
     }
 
     function soloNumeros(valor) {
