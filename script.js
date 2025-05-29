@@ -1,69 +1,59 @@
-const libros = [];
-const carrito = [];
-
-function agregarLibro() {
-    const titulo = document.getElementById("titulo").value.trim();
-    const precio = parseFloat(document.getElementById("precio").value);
-
-    if (titulo === "" || isNaN(precio) || precio <= 0) {
-        alert("Ingrese un título y un precio válido.");
-        return;
+function soloLetras(valor) {
+      return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(valor);
     }
 
-    const libro = { titulo, precio };
-    libros.push(libro);
-    mostrarLibros();
+    function soloNumeros(valor) {
+      return /^\d{8}$/.test(valor);
+    }
 
-    // Limpiar inputs
-    document.getElementById("titulo").value = "";
-    document.getElementById("precio").value = "";
-}
+    function fechaValida(valor) {
+      const fecha = new Date(valor);
+      return fecha.getFullYear() > 2006;
+    }
 
-function mostrarLibros() {
-    const contenedor = document.getElementById("librosDisponibles");
-    contenedor.innerHTML = "";
+    function emailValido(valor) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    }
 
-    libros.forEach((libro, index) => {
-        const div = document.createElement("div");
-        div.className = "libro";
-        div.innerHTML = `
-            <strong>${libro.titulo}</strong><br>
-            Precio: $${libro.precio.toFixed(2)}<br>
-            <button onclick="agregarAlCarrito(${index})">Agregar al carrito</button>
-        `;
-        contenedor.appendChild(div);
-    });
-}
+    function validarFormulario() {
+      const apellido = document.getElementById("apellido").value.trim();
+      const nombre = document.getElementById("nombre").value.trim();
+      const dni = document.getElementById("dni").value.trim();
+      const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+      const email = document.getElementById("email").value.trim();
 
-function agregarAlCarrito(index) {
-    const libro = libros[index];
-    carrito.push(libro);
-    mostrarCarrito();
-}
+      if (!soloLetras(apellido)) {
+        alert("El apellido solo debe contener letras.");
+        return false;
+      }
+      if (!soloLetras(nombre)) {
+        alert("El nombre solo debe contener letras.");
+        return false;
+      }
+      if (!soloNumeros(dni)) {
+        alert("El DNI debe contener exactamente 8 dígitos.");
+        return false;
+      }
+      if (!fechaValida(fechaNacimiento)) {
+        alert("La fecha de nacimiento debe ser posterior al año 2006.");
+        return false;
+      }
+      if (!emailValido(email)) {
+        alert("El email ingresado no es válido.");
+        return false;
+      }
+      alert("Formulario enviado correctamente.");
+      return true;
+    }
 
-function mostrarCarrito() {
-    const contenedor = document.getElementById("carrito");
-    contenedor.innerHTML = "";
+    function preguntasProgresivas() {
+      const respuestas = [];
+      respuestas.push(prompt("¿Cuál es tu nacionalidad?"));
+      respuestas.push(prompt("¿Cuál es tu color favorito?"));
+      respuestas.push(prompt("¿Cuál es el nombre de tu mascota?"));
 
-    carrito.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "carrito";
-        div.innerHTML = `
-            • ${item.titulo} - $${item.precio.toFixed(2)}
-            <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
-        `;
-        contenedor.appendChild(div);
-    });
-
-    calcularTotal();
-}
-
-function eliminarDelCarrito(index) {
-    carrito.splice(index, 1);
-    mostrarCarrito();
-}
-
-function calcularTotal() {
-    const total = carrito.reduce((sum, item) => sum + item.precio, 0);
-    document.getElementById("total").textContent = `Total: $${total.toFixed(2)}`;
-}
+      let output = "<h4>Respuestas:</h4><ul>";
+      respuestas.forEach(res => output += `<li>${res}</li>`);
+      output += "</ul>";
+      document.getElementById("respuestas").innerHTML = output;
+    }
